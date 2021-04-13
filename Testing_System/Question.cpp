@@ -59,7 +59,9 @@ map<int, string> Question::GetAnswers() const
 
 #pragma region To Add Answers
 
-
+// Adds 1 answer
+// _pos = id of answer
+// Used in Test::AddQuestion() method
 void Question::AddAnswer(int _pos, string _ans)
 {
 	answers.insert(std::make_pair(_pos, _ans));
@@ -113,7 +115,7 @@ void Question::ShowQuestion() const
 }
 
 
-// No correct answer
+// Same as for admin, but no correct answer
 void Question::ShowQuestionForGuest() const
 {
 	 //question statement

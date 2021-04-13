@@ -112,9 +112,6 @@ void Test::FillTest()
 
 	int key;
 
-	// Possible user choice 
-	bool add = true;
-	bool exit = false;
 	system("cls");
 
 
@@ -160,12 +157,15 @@ void Test::FillTest()
 
 // For guest to take a test
 // For more info look at Test.h
-void Test::GuestTakeTest(string _test_name)
+// returns result
+int Test::GuestTakeTest(string _test_name)
 {
 	system("cls");
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
 	int number_of_correct_questions = 0;
+
+		/* Show questions */
 
 	for (auto q : questions)
 	{
@@ -244,12 +244,16 @@ void Test::GuestTakeTest(string _test_name)
 
 
 	// Grade
+	int grade = 0;
 	SetConsoleTextAttribute(hConsole, 15);
 	cout << "Grade: ";
+	grade = (round)(12.0 * ((float)number_of_correct_questions / (float)totalNumberOfQuestions));
 	SetConsoleTextAttribute(hConsole, 11);
-	cout << (round)(12.0 * ((float)number_of_correct_questions / (float)totalNumberOfQuestions)) << "\n";
+	cout << grade << "\n";
 	SetConsoleTextAttribute(hConsole, 15);
 	system("pause");
+
+	return grade;
 }
 
 #pragma endregion
@@ -260,6 +264,7 @@ void Test::GuestTakeTest(string _test_name)
 
 
 // Shows Test question with answers
+// Used only by admin
 void Test::ShowTest()
 {
 	system("cls");
@@ -283,7 +288,7 @@ void Test::ShowTest()
 
 
 
-#pragma region To load and Save test
+#pragma region To Load and Save test
 
 
 // Read more info in Test.h
@@ -296,7 +301,7 @@ bool Test::SaveTestToFile(string _path_to_directory)
 
 	string test_save_name;
 	
-
+	system("cls");
 	cout << "\nEnter test name: ";
 	SetConsoleTextAttribute(hConsole, 14);
 	getline(cin, test_save_name);

@@ -26,7 +26,7 @@ public:
 	void SaveAdminInfo();
 
 
-	// Gets admin login and password and sets it 
+	// Gets admin login and password, decrypts it and sets it to systemAdmin in TestSystem 
 	void GetAdminInfo();
 
 
@@ -40,6 +40,6 @@ public:
 
 
 	// To delete admin
-	virtual bool Delete();
+	bool Delete();
 };
 

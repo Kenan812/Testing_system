@@ -52,7 +52,8 @@ public:
 	// --Shows number of correct answers at the end of the test
 	// ADD: 1) Stop the test at any point
 	//		2) Save stats at the end of test
-	void GuestTakeTest(string _test_name);
+	// returns result
+	int GuestTakeTest(string _test_name);
 
 
 

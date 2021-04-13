@@ -39,7 +39,7 @@ using std::endl;
 class Question
 {
 protected:
-	int totalNumberOfAnswers;  // Set in Test class
+	int totalNumberOfAnswers;
 	int numberOfCorrectAnswer;
 	string questionStatement;
 	map<int, string> answers;  // first - id of answer(starts from 1) | second - answer statement
@@ -66,6 +66,7 @@ public:
 
 	// =======================================================//
 
+		/* To Add Answers */
 
 
 	// Adds 1 answer
@@ -86,7 +87,7 @@ public:
 	void ShowQuestion() const;
 
 
-	// No correct answer
+	// Same as for admin, but no correct answer
 	void ShowQuestionForGuest() const;
 
 

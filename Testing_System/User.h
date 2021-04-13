@@ -18,6 +18,7 @@ using std::string;
 using std::ios;
 using std::fstream;
 using std::endl;
+using std::map;
 
 class User
 {
@@ -27,6 +28,7 @@ protected:
 
 public:
 
+		/* Constructers */
 
 	User();
 	User(string _login, string _password);
@@ -35,6 +37,8 @@ public:
 
 	//===============================================//
 
+
+		/* Getters and Setters */
 
 
 	void SetLogin(string _login);
@@ -47,6 +51,8 @@ public:
 
 	//====================================================//
 
+
+		/* Encryption and decryption */
 
 
 	// To Encrypt
@@ -61,12 +67,14 @@ public:
 
 	//====================================================//
 
-
+		/* Abstract method */
+		
 	virtual bool Register() = 0;
-	virtual bool Delete() = 0;
-
 };
 
+
+
+		/* Help Functions */
 
 // Returns true if 'word' has space
 bool CheckForSpace(string word);

@@ -53,7 +53,7 @@ TestSystem::TestSystem()
 
 
 // Lets Use TestSystem
-// Comtains all possible admin and guest actions
+// Contains all possible admin and guest actions
 void TestSystem::Use()
 {
 	if (is_admin)
@@ -75,26 +75,11 @@ void TestSystem::UseAdmin()
 
 		system("cls");
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, 12);
-		cout << "\n\t\tAdmin\n\n";
 		SetConsoleTextAttribute(hConsole, 15);
 
-		int num = 0;  // user choice
+		int num;  // user choice
 
-		cout << "\n\tChoose an option\n";
-
-		SetConsoleTextAttribute(hConsole, 15);
-		cout << "(1) Manage categories\n" <<
-			"(2) Manage guests\n" <<
-			"(3) Show statistics(In progress)\n" <<
-			"(4) Change login and password\n" <<
-			"(5) Exit\n";
-
-		cout << "\nEnter choice: ";
-		SetConsoleTextAttribute(hConsole, 14);
-		cin >> num;
-		SetConsoleTextAttribute(hConsole, 15);
-
+		num = DoChoice("Admin", "(1) Manage categories", "(2) Manage guests", "(3) Show statistics", "(4) Change login and password", "(5) Exit");
 
 		switch (num)
 		{
@@ -109,6 +94,8 @@ void TestSystem::UseAdmin()
 			break;
 
 		case 3:
+			ManageStatistics();
+			system("pause");
 			break;
 
 
@@ -125,12 +112,7 @@ void TestSystem::UseAdmin()
 		default:
 			break;
 		}
-
-	
 	}
-
-
-
 }
 
 
@@ -143,24 +125,12 @@ void TestSystem::UseGuest()
 	{
 		system("cls");
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, 12);
-		cout << "\n\t\tGuest\n\n";
 		SetConsoleTextAttribute(hConsole, 15);
 
-		int num = 0;  // user choice
+		int num;  // user choice
 
-		cout << "\n\tChoose an option\n";
+		num = DoChoice("Guest", "(1) Take a new test", "(2) Show tests results", "(3) Exit(To save progress)");
 
-		SetConsoleTextAttribute(hConsole, 15);
-		cout << "(1) Take a new test\n" <<
-			"(2) Continue test(Work in progress)\n" <<
-			"(3) See statistics(Work in progress)\n" <<
-			"(4) Exit\n";
-
-		cout << "\nEnter choice: ";
-		SetConsoleTextAttribute(hConsole, 14);
-		cin >> num;
-		SetConsoleTextAttribute(hConsole, 15);
 
 		bool is_found;  // Used to find path to desirable test
 
@@ -184,16 +154,14 @@ void TestSystem::UseGuest()
 			
 			break;
 
-
 		case 2:
+			system("cls");
+			currentGuest.ShowAllResults();
+			system("pause");
 			break;
 
 
 		case 3:
-			break;
-
-
-		case 4:
 			// in case if new guest was added
 			OverrideGuests();
 
@@ -250,27 +218,10 @@ void TestSystem::ManageCategories()
 				*/
 
 
-				system("cls");
-				SetConsoleTextAttribute(hConsole, 12);
-				cout << "\n\t\tYou are in Categories\n\n";
-				cout << "\tAll categories:\n";				
+				system("cls");	
 				SetConsoleTextAttribute(hConsole, 15);
-				
-				Show();
-				
-				SetConsoleTextAttribute(hConsole, 12);
-				cout << "\n\tChoose an option\n";
-				SetConsoleTextAttribute(hConsole, 15);
-				
-				cout << "(1) Add new category\n"
-					<< "(2) Go to category\n"
-					<< "(3) Exit\n\n";
 
-
-				cout << "Enter choice: ";
-				SetConsoleTextAttribute(hConsole, 14);
-				cin >> num;
-				SetConsoleTextAttribute(hConsole, 15);
+				num = DoChoice("You are in Categories", "(1) Add new category", "(2) Go to category", "(3) Exit");
 
 
 				switch (num)
@@ -281,13 +232,16 @@ void TestSystem::ManageCategories()
 
 				case 2:
 					int n;
+					Show();
 					cout << "Enter number of category: ";
 					cin >> n;
 					{
 						bool is_goto = GoTo(n);
 						if (!is_goto)
 						{
+							SetConsoleTextAttribute(hConsole, 12);
 							cout << "Unable to perform operation\n";
+							SetConsoleTextAttribute(hConsole, 15);
 							GoBack();
 						}
 					}
@@ -309,6 +263,7 @@ void TestSystem::ManageCategories()
 
 
 
+
 		//===================================================================
 
 				/*  User is in particular categorie   */
@@ -326,28 +281,8 @@ void TestSystem::ManageCategories()
 			{
 				system("cls");
 				SetConsoleTextAttribute(hConsole, 15);
-				cout << "\n\t\tYou are in categorie: ";
-				SetConsoleTextAttribute(hConsole, 12);
-				cout << GetLastDir(mainPath) << "\n\n"; 
-				SetConsoleTextAttribute(hConsole, 15);
-				
-				
-				Show();
 
-				SetConsoleTextAttribute(hConsole, 12);
-				cout << "\n\tChoose an option\n";
-				SetConsoleTextAttribute(hConsole, 15);
-
-
-				cout << "(1) Add new subject\n"
-					<< "(2) Go to subject\n"
-					<< "(3) Go back\n\n";
-
-
-				cout << "Enter choice: ";
-				SetConsoleTextAttribute(hConsole, 14);
-				cin >> num;
-				SetConsoleTextAttribute(hConsole, 15);
+				num = DoChoice(1, "You are in categorie: ", GetLastDir(mainPath), "(1) Add new subject", "(2) Go to subject", "(3) Exit");
 
 				switch (num)
 				{
@@ -357,13 +292,16 @@ void TestSystem::ManageCategories()
 
 				case 2:
 					int n;
+					Show();
 					cout << "Enter number of subject: ";
 					cin >> n;
 					{
 						bool is_goto = GoTo(n);
 						if (!is_goto) 
 						{
-							cout << "Unable to perform operation\n"; 
+							SetConsoleTextAttribute(hConsole, 12);
+							cout << "Unable to perform operation\n";
+							SetConsoleTextAttribute(hConsole, 15);
 							GoBack();
 						}
 					}
@@ -386,6 +324,7 @@ void TestSystem::ManageCategories()
 
 
 
+
 		//===================================================================
 
 				/*  User is in particular subject   */
@@ -397,21 +336,8 @@ void TestSystem::ManageCategories()
 			{
 				system("cls");
 				SetConsoleTextAttribute(hConsole, 15);
-				cout << "\n\t\tYou are in subject: ";
-				SetConsoleTextAttribute(hConsole, 12);
-				cout << GetLastDir(mainPath) << "\n\n";
-				SetConsoleTextAttribute(hConsole, 15);
 
-				cout << "(1) Add new test\n"
-					<< "(2) Show All tests\n"
-					<< "(3) Show test content\n"
-					<< "(4) Go back\n\n";
-
-
-				cout << "Enter choice: ";
-				SetConsoleTextAttribute(hConsole, 14);
-				cin >> num;
-				SetConsoleTextAttribute(hConsole, 15);
+				num = DoChoice(1, "You are in subject: ", GetLastDir(mainPath), "(1) Add new test", "(2) Show All tests", "(3) Show test content", "(4) Go back");
 
 				Subject* s;
 				Test* t;
@@ -440,59 +366,36 @@ void TestSystem::ManageCategories()
 					/* Go to file */
 
 					//=======================================================
+					
 					{
 						int n;
 						cout << "\nChoose test number: ";
 						cin >> n;
 
-						mainPath += "*";
+						bool to_show = ChooseTest(n);
 
-						bool to_show = false;
 
-						_finddata_t* fileinfo = new _finddata_t;
-						long done = _findfirst(mainPath.c_str(), fileinfo);
-						int isReadable = done;
-						int count = 0;
-
-						cout << "\n";
-						while (isReadable != -1)
+						if (!to_show) 
 						{
-							if (fileinfo->name[0] != '.')
-							{
-								count++;
-
-								if (count == n)
-								{
-									mainPath.pop_back();
-									mainPath += fileinfo->name;
-									to_show = true;
-									break;
-								}
-							}
-							isReadable = _findnext(done, fileinfo);
-						}
-
-						_findclose(done);
-						delete fileinfo;
-
-
-					//=======================================================
-
-
-
-						if (!to_show) {
 							system("cls");
+							SetConsoleTextAttribute(hConsole, 12);
 							cout << "No such test\n";
+							SetConsoleTextAttribute(hConsole, 15);
 							system("pause");
 						}
-						else {
+						else 
+						{
 							t->LoadTestFromFile(mainPath);
 							t->ShowTest();
 							system("pause");
 						}
 						
 						if (t) delete t;
+
 					}
+					
+					//=======================================================
+					
 
 					GoBack();
 					break;
@@ -511,43 +414,6 @@ void TestSystem::ManageCategories()
 
 
 		//===================================================================
-
-
-
-		//===================================================================
-
-				/*  User is in particular test   */
-				/*  Used for possible addition later */
-
-		else
-		{
-			while (num != 1)
-			{
-				cout << "(1) Go back\n";
-
-				cout << "Enter choice: ";
-				SetConsoleTextAttribute(hConsole, 14);
-				cin >> num;
-				SetConsoleTextAttribute(hConsole, 15);
-
-				switch (num)
-				{
-				case 1:
-					GoBack();
-					break;
-
-				default:
-					break;
-				}
-			}
-			
-		}
-
-
-
-		//===================================================================
-
-
 	}
 }
 
@@ -560,25 +426,12 @@ void TestSystem::ManageGuests()
 	{
 		system("cls");
 		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-		SetConsoleTextAttribute(hConsole, 12);
-		cout << "\n\t\tManaging guests\n\n";
-		SetConsoleTextAttribute(hConsole, 15);
-
-		int num = 0;  // user choice
-
-		cout << "\n\tChoose an option\n";
 
 		SetConsoleTextAttribute(hConsole, 15);
-		cout << "(1) Add new guest\n" <<
-				"(2) Modify guest info\n" <<
-				"(3) Delete guest\n" <<
-				"(4) Show all guests\n" <<
-				"(5) Exit\n";
 
-		cout << "\nEnter choice: ";
-		SetConsoleTextAttribute(hConsole, 14);
-		cin >> num;
-		SetConsoleTextAttribute(hConsole, 15);
+		int num;  // user choice
+
+		num = DoChoice("Managing guests", "(1) Add new guest", "(2) Modify guest info", "(3) Delete guest", "(4) Show all guests", "(5) Exit(To save all changes)");
 
 		switch (num)
 		{
@@ -645,6 +498,135 @@ void TestSystem::ManageGuests()
 
 
 
+// To show statistics
+void TestSystem::ManageStatistics()
+{
+	while (true)
+	{
+		system("cls");
+		HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		SetConsoleTextAttribute(hConsole, 15);
+
+		int num;  // user choice
+
+
+		num = DoChoice("Statistics", "(1) Show stats by category", "(2) Show stats by subject", "(3) Show stats by guests", "(4) Exit");
+
+		switch (num)
+		{
+
+		case 1:
+
+			Show();
+
+			int n;
+			cout << "Enter number of category: ";
+			cin >> n;
+			{
+				bool is_goto = GoTo(n);
+				if (!is_goto)
+				{
+					SetConsoleTextAttribute(hConsole, 12);
+					cout << "Unable to perform operation\n";
+					SetConsoleTextAttribute(hConsole, 15);
+				}
+				else
+				{
+					system("cls");
+					for (auto g : allGuests)
+					{		
+						g.second.ShowCategoryReslts(mainPath);
+						cout << "\n\n";
+					}
+				}
+			}
+
+			GoBack();
+
+			system("pause");
+			break;
+		
+
+		case 2:
+
+			Show();
+
+			int i;
+			cout << "Enter number of category: ";
+			cin >> i;
+			{
+				bool is_goto = GoTo(i);
+				if (!is_goto)
+				{
+					SetConsoleTextAttribute(hConsole, 12);
+					cout << "Unable to perform operation\n";
+					SetConsoleTextAttribute(hConsole, 15);
+				}
+				else
+				{
+					Show();
+
+					cout << "Enter number of subject: ";
+					cin >> i;
+					{
+						bool is_goto = GoTo(i);
+						if (!is_goto)
+						{
+							SetConsoleTextAttribute(hConsole, 12);
+							cout << "Unable to perform operation\n";
+							SetConsoleTextAttribute(hConsole, 15);
+						}
+						else
+						{
+							system("cls");
+							for (auto g : allGuests)
+							{
+								g.second.ShowCategoryReslts(mainPath);
+								cout << "\n\n";
+							}
+						}
+					}
+
+					GoBack();
+				}
+			}
+
+			GoBack();
+
+			system("pause");
+			break;
+
+
+		case 3:
+			system("cls");
+
+			for (auto g : allGuests)
+			{
+				SetConsoleTextAttribute(hConsole, 12);
+				cout << "\n\n\t\t\t\t\tTest results\n\n\n"; 
+				g.second.ShowAllResults();
+				SetConsoleTextAttribute(hConsole, 15);
+				cout << "\n\n";
+			}
+			
+			system("pause");
+			break;
+
+		case 4:
+			return;
+		
+		default:
+			break;
+
+		}
+
+
+	}
+}
+
+
+
 
 #pragma endregion
 
@@ -682,9 +664,20 @@ void TestSystem::TakeNewTest(string _path_to_file)
 
 		/* Take test */
 	// resuls shown;
-	t.GuestTakeTest(test_name);
+	int test_result = t.GuestTakeTest(test_name);
+	
 
-	// system("cls");
+		/* Add guest result */
+	for (auto g : allGuests)
+	{
+		if (g.first == currentGuest.GetLogin())
+		{
+			map<string, Guest>::iterator find_guest = allGuests.find(g.first);
+			find_guest->second.AddResult(_path_to_file, test_result);
+
+			currentGuest.AddResult(_path_to_file, test_result);
+		}
+	}
 
 }
 
@@ -754,7 +747,9 @@ bool TestSystem::FindTest()
 						bool is_goto = GoTo(n);
 						if (!is_goto)
 						{
+							SetConsoleTextAttribute(hConsole, 12);
 							cout << "Unable to perform operation\n";
+							SetConsoleTextAttribute(hConsole, 15);
 							GoBack();
 						}
 					}
@@ -827,7 +822,9 @@ bool TestSystem::FindTest()
 						bool is_goto = GoTo(n);
 						if (!is_goto)
 						{
+							SetConsoleTextAttribute(hConsole, 12);
 							cout << "Unable to perform operation\n";
+							SetConsoleTextAttribute(hConsole, 15);
 							GoBack();
 						}
 					}
@@ -867,6 +864,7 @@ bool TestSystem::FindTest()
 				cout << "\n\t\t\tChoosing test\n\n";
 				SetConsoleTextAttribute(hConsole, 15);
 				cout << "\n\t\tYou are in subject: ";
+
 				SetConsoleTextAttribute(hConsole, 12);
 				cout << GetLastDir(mainPath) << "\n\n";
 				SetConsoleTextAttribute(hConsole, 15);
@@ -896,51 +894,23 @@ bool TestSystem::FindTest()
 
 					/* Go to file */
 
-					//=======================================================
 					{
 						int n;
 						cout << "\nChoose test number: ";
 						cin >> n;
 
-						mainPath += "*";
+						bool to_show = ChooseTest(n);
+												
 
-						bool to_show = false;
-
-						_finddata_t* fileinfo = new _finddata_t;
-						long done = _findfirst(mainPath.c_str(), fileinfo);
-						int isReadable = done;
-						int count = 0;
-
-						cout << "\n";
-						while (isReadable != -1)
-						{
-							if (fileinfo->name[0] != '.')
-							{
-								count++;
-
-								if (count == n)
-								{
-									mainPath.pop_back();
-									mainPath += fileinfo->name;
-									to_show = true;
-									break;
-								}
-							}
-							isReadable = _findnext(done, fileinfo);
-						}
-
-						_findclose(done);
-						delete fileinfo;
-
-
-						//=======================================================
 
 
 
 						if (!to_show) 
 						{
 							system("cls");
+							SetConsoleTextAttribute(hConsole, 12);
 							cout << "No such test\n";
+							SetConsoleTextAttribute(hConsole, 15);
 							system("pause");
 						}
 						else 
@@ -1216,7 +1186,10 @@ void TestSystem::RegisterNewGuest()
 	SetConsoleTextAttribute(hConsole, 15);
 
 	cout << "Create pasword: ";
+	SetConsoleTextAttribute(hConsole, 14);
 	getline(cin, password_tmp);
+	SetConsoleTextAttribute(hConsole, 15);
+	
 	new_guest.SetPassword(password_tmp);
 
 	new_guest.Register();
@@ -1224,10 +1197,22 @@ void TestSystem::RegisterNewGuest()
 	totalNumberOfGuests++;
 
 	allGuests.insert(make_pair(new_guest.GetLogin(), new_guest));
+
+
+	// If guest signed up set guest info to current guest
+	if (!is_admin)
+	{
+		currentGuest = new_guest;
+	}
+
+	SetConsoleTextAttribute(hConsole, 12);
+	cout << "Exit to save\n";
+	SetConsoleTextAttribute(hConsole, 15);
+	system("pause");
 }
 
 
-
+// Sings in guest and sets him to currentGuest
 bool TestSystem::SignInGuest()
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -1253,7 +1238,7 @@ bool TestSystem::SignInGuest()
 		getline(cin, password_input);
 
 
-
+		// to check password
 		for (auto g : allGuests)
 		{
 
@@ -1264,6 +1249,17 @@ bool TestSystem::SignInGuest()
 					SetConsoleTextAttribute(hConsole, 10);
 					cout << "\nSign in successful" << endl;
 					SetConsoleTextAttribute(hConsole, 15);
+					
+					// to load current guest
+					currentGuest.SetLogin(g.first);
+					currentGuest.SetPassword(g.second.GetPassword());
+					currentGuest.SetName(g.second.GetName());
+					currentGuest.SetSurname(g.second.GetSurname());
+					currentGuest.SetPatronymic(g.second.GetPatronymic());
+					currentGuest.SetAddress(g.second.GetAddress());
+					currentGuest.SetPhoneNumber(g.second.GetPhoneNumber());
+					currentGuest.SetTestResults(g.second.GetTestTesults());
+
 					return true;
 				}
 				else
@@ -1297,7 +1293,7 @@ bool TestSystem::SignInGuest()
 
 
 
-// Show all categories, all subjects, tests by mainPath  
+// Show all categories, all subjects, tests by using mainPath  
 void TestSystem::Show()
 {
 	mainPath += "*";
@@ -1395,7 +1391,6 @@ void TestSystem::GoBack()
 
 
 
-
 #pragma region Save and Load Guests
 
 
@@ -1442,6 +1437,23 @@ void TestSystem::SaveGuestInfo(string login, Guest g)
 		file.write((char*)&size, sizeof(size));
 		file.write(g.GetPhoneNumber().c_str(), size * sizeof(char));
 
+		// saving test results
+
+		// writing number of solved tests
+		size = g.GetTestTesults().size();
+		file.write((char*)&size, sizeof(size));
+
+		for (auto elem : g.GetTestTesults())
+		{
+			// writing path to file
+			size = elem.first.length();
+			file.write((char*)&size, sizeof(size));
+			file.write(elem.first.c_str(), size * sizeof(char));
+
+			// writing result
+			file.write((char*)&elem.second, sizeof(elem.second));
+		}
+
 		cout << "Save successful\n";
 
 		file.close();
@@ -1471,7 +1483,7 @@ void TestSystem::LoadGuestsInfo()
 	try
 	{
 
-		if (!file) throw "Unable to open the file for read";
+		if (!file) throw "No guests available";
 
 
 
@@ -1614,6 +1626,31 @@ void TestSystem::LoadGuestsInfo()
 
 
 
+			// Reading test result
+			int n_of_solved_tests, r;
+			char* path_to_file;
+
+			file.read((char*)&n_of_solved_tests, sizeof(int));
+
+			for (int ii = 0; ii < n_of_solved_tests; ii++)
+			{
+				file.read((char*)&size, sizeof(int));
+
+				path_to_file = new char[size + 1];
+
+				file.read(path_to_file, size * sizeof(char));
+				path_to_file[size] = '\0';
+
+				// result
+				file.read((char*)&r, sizeof(int));
+
+				new_guest.AddResult(path_to_file, r);
+
+				if (path_to_file) delete[] path_to_file;
+			}
+
+
+
 			if (enc_login) delete[] enc_login;
 			if (enc_password) delete[] enc_password;
 			if (n) delete[] n;
@@ -1684,6 +1721,12 @@ void TestSystem::OverrideGuests()
 #pragma endregion
 
 
+
+#pragma region Auxiliary admin options
+
+
+
+
 // Adds category to Categories directory
 void TestSystem::Add()
 {
@@ -1725,16 +1768,258 @@ void TestSystem::ShowAllGuests() const
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(hConsole, 12);
 	
-	cout << "\n\tAll Guests\n\n";
+	cout << "\n\t\t\t\t\t\tAll Guests\n\n\n";
 	SetConsoleTextAttribute(hConsole, 15);
 
-	int i = 1;
+	int id = 1;
+
+
+
+	
+	cout << (char)201;
+	for (int i = 0; i <= 114; i++)
+	{
+		if (i == 5 || i == 23 || i == 39 || i == 55 || i == 71 || i == 99 || i == 116)
+			cout << (char)203;
+
+		else
+			cout << (char)205;
+	}
+	cout << (char)187;
+	cout << "\n";
+
+
+
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j <= 116; j++)
+		{
+
+			if (i != 1)
+			{
+				if (j == 0 || j == 6 || j == 24 || j == 40 || j == 56 || j == 72 || j == 100 || j == 116)
+				{
+					cout << (char)186;
+				}
+
+				else
+				{
+					cout << " ";
+				}
+			}
+
+
+			else
+			{
+				if (j == 2)
+				{
+					SetConsoleTextAttribute(hConsole, 12);
+					cout << "ID";
+					SetConsoleTextAttribute(hConsole, 15);
+				}
+
+				else if (j == 12)
+				{
+					SetConsoleTextAttribute(hConsole, 12);
+					cout << "LOGIN";
+					SetConsoleTextAttribute(hConsole, 15);
+				}
+
+				else if (j == 25)
+				{
+					SetConsoleTextAttribute(hConsole, 12);
+					cout << "Name";
+					SetConsoleTextAttribute(hConsole, 15);
+				}
+
+				else if (j == 37)
+				{
+					SetConsoleTextAttribute(hConsole, 12);
+					cout << "Surname";
+					SetConsoleTextAttribute(hConsole, 15);
+				}
+
+				else if (j == 45)
+				{
+					SetConsoleTextAttribute(hConsole, 12);
+					cout << "Patronymic";
+					SetConsoleTextAttribute(hConsole, 15);
+				}
+
+				else if (j == 59)
+				{
+					SetConsoleTextAttribute(hConsole, 12);
+					cout << "Address";
+					SetConsoleTextAttribute(hConsole, 15);
+				}
+
+				else if (j == 73)
+				{
+					SetConsoleTextAttribute(hConsole, 12);
+					cout << "Phone Number";
+					SetConsoleTextAttribute(hConsole, 15);
+				}
+
+				else if (j == 0 || j == 5 || j == 19 || j == 32 || j == 42 || j == 49 || j == 71 || j == 76)
+				{
+					cout << (char)186;
+				}
+
+				else if (j <= 77)
+				{
+					cout << " ";
+				}
+			}
+		}
+
+		//if (i != 1)
+		cout << "\n";
+	}
+
+
+
+	
 
 	for (auto g : allGuests)
 	{
-		cout << "(" << i << ") " << g.first << "\n";
-		i++;
+
+		cout << (char)204;
+		for (int j = 0; j <= 114; j++)
+		{
+			if (j == 5 || j == 23 || j == 39 || j == 55 || j == 71 || j == 99 || j == 116)
+				cout << (char)206;
+
+			else
+				cout << (char)205;
+		}
+		cout << (char)185;
+		cout << "\n";
+
+
+		// Empty row
+		for (int i = 0; i <= 116; i++)
+		{
+			if (i == 0 || i == 6 || i == 24 || i == 40 || i == 56 || i == 72 || i == 100 || i == 116)
+			{
+				cout << (char)186;
+			}
+			else
+			{
+				cout << " ";
+			}
+		}
+
+		cout << "\n";
+
+		//=============================================================================================
+		
+			// Show all info
+		
+		
+
+		cout << (char)186 << " ";
+
+		// Id
+		SetConsoleTextAttribute(hConsole, 14);
+		cout << id;
+		SetConsoleTextAttribute(hConsole, 15);
+		if (id < 10) cout << "   ";
+		else if (id < 100) cout << "  ";
+		else cout << " ";
+
+		cout << (char)186 << " ";
+
+
+		// login
+		SetConsoleTextAttribute(hConsole, 14);
+		cout << g.first;
+		SetConsoleTextAttribute(hConsole, 15);
+		for (int j = 0; j < 16 - g.first.length(); j++) cout << " ";
+		
+		cout << (char)186 << " ";
+
+
+		// name
+		SetConsoleTextAttribute(hConsole, 14);
+		cout << g.second.GetName();
+		SetConsoleTextAttribute(hConsole, 15);
+		for (int j = 0; j < 14 - g.second.GetName().length(); j++) cout << " ";
+
+		cout << (char)186 << " ";
+
+		
+		// surname 
+		SetConsoleTextAttribute(hConsole, 14);
+		cout << g.second.GetSurname();
+		SetConsoleTextAttribute(hConsole, 15);
+		for (int j = 0; j < 14 - g.second.GetSurname().length(); j++) cout << " ";
+
+		cout << (char)186 << " ";
+		
+
+		// patronymic
+		SetConsoleTextAttribute(hConsole, 14);
+		cout << g.second.GetPatronymic();
+		SetConsoleTextAttribute(hConsole, 15);
+		for (int j = 0; j < 14 - g.second.GetPatronymic().length(); j++) cout << " ";
+
+		cout << (char)186 << " ";
+
+
+		// address
+		SetConsoleTextAttribute(hConsole, 14);
+		cout << g.second.GetAddress();
+		SetConsoleTextAttribute(hConsole, 15);
+		for (int j = 0; j < 26 - g.second.GetAddress().length(); j++) cout << " ";
+
+		cout << (char)186 << " ";
+
+
+		// pnone number
+		SetConsoleTextAttribute(hConsole, 14);
+		cout << g.second.GetPhoneNumber();
+		SetConsoleTextAttribute(hConsole, 15);
+		for (int j = 0; j < 14 - g.second.GetPhoneNumber().length(); j++) cout << " ";
+
+		cout << (char)186;
+
+		id++;
+
+		cout << "\n";
+
+		//=============================================================================================
+
+
+		// Empty row
+		for (int i = 0; i <= 116; i++)
+		{
+			if (i == 0 || i == 6 || i == 24 || i == 40 || i == 56 || i == 72 || i == 100 || i == 116)
+			{
+				cout << (char)186;
+			}
+			else
+			{
+				cout << " ";
+			}
+		}
+
+		cout << "\n";
+
+
 	}
+
+
+	cout << (char)200;
+	for (int i = 0; i <= 114; i++)
+	{
+		if (i == 5 || i == 23 || i == 39 || i == 55 || i == 71 || i == 99 || i == 116)
+			cout << (char)202;
+
+		else
+			cout << (char)205;
+	}
+	cout << (char)188;
+	cout << endl;
 }
 
 
@@ -1787,6 +2072,8 @@ void TestSystem::ModifyGuestInfo()
 			SetConsoleTextAttribute(hConsole, 15);
 
 			string s;
+			map<string, Guest>::iterator it = allGuests.find(g.first);
+
 
 			switch (num)
 			{
@@ -1796,14 +2083,8 @@ void TestSystem::ModifyGuestInfo()
 				cin >> s;
 				SetConsoleTextAttribute(hConsole, 15);
 
-				g.second.SetName(s);
-
-				system("pause");
-
-				cout << "\nNew name:" << g.second.GetName() << "\n";
-
-				system("pause");
-
+				
+				it->second.SetName(s);
 
 				return;
 
@@ -1814,7 +2095,7 @@ void TestSystem::ModifyGuestInfo()
 				cin >> s;
 				SetConsoleTextAttribute(hConsole, 15);
 
-				g.second.SetSurname(s);
+				it->second.SetSurname(s);
 				return;
 
 
@@ -1824,7 +2105,7 @@ void TestSystem::ModifyGuestInfo()
 				cin >> s;
 				SetConsoleTextAttribute(hConsole, 15);
 
-				g.second.SetPatronymic(s);
+				it->second.SetPatronymic(s);
 				return;
 
 
@@ -1834,7 +2115,7 @@ void TestSystem::ModifyGuestInfo()
 				cin >> s;
 				SetConsoleTextAttribute(hConsole, 15);
 
-				g.second.SetAddress(s);
+				it->second.SetAddress(s);
 				return;
 
 			case 5:
@@ -1843,7 +2124,7 @@ void TestSystem::ModifyGuestInfo()
 				cin >> s;
 				SetConsoleTextAttribute(hConsole, 15);
 
-				g.second.SetPhoneNumber(s);
+				it->second.SetPhoneNumber(s);
 				return;
 
 
@@ -1864,6 +2145,7 @@ void TestSystem::ModifyGuestInfo()
 
 // Deletes guest from allGuests
 // Works using guest id(initialized inside)
+// Used by admin
 bool TestSystem::DeleteGuest()
 {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -1900,6 +2182,55 @@ bool TestSystem::DeleteGuest()
 
 	return false;
 }
+
+
+
+
+#pragma endregion
+
+
+
+#pragma region Auxiliary guest options
+
+
+// Accepts number of test
+// Modifies main path, so that it leads to test
+// Returns true if test was found 
+bool TestSystem::ChooseTest(int _num)
+{
+	mainPath += "*";
+
+	_finddata_t* fileinfo = new _finddata_t;
+	long done = _findfirst(mainPath.c_str(), fileinfo);
+	int isReadable = done;
+	int count = 0;
+
+	cout << "\n";
+	while (isReadable != -1)
+	{
+		if (fileinfo->name[0] != '.')
+		{
+			count++;
+
+			if (count == _num)
+			{
+				mainPath.pop_back();
+				mainPath += fileinfo->name;
+				return true;
+				break;
+			}
+		}
+
+		isReadable = _findnext(done, fileinfo);
+	}
+
+	_findclose(done);
+	delete fileinfo;
+	
+	return false;
+}
+
+#pragma endregion
 
 
 

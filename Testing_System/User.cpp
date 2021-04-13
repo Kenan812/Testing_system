@@ -83,7 +83,6 @@ string User::Decrypt(string _word)
 
 
 
-
 #pragma region Help Functions
 
 
